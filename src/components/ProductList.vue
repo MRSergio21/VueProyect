@@ -2,15 +2,21 @@
   <div class="product-list">
     <h2>Product Inventory</h2>
     <div class="grid">
-      <ProductItem v-for="(product, index) in inventory.products" 
-                   :key="index" 
-                   :product="product" />
+      <ProductItem 
+        v-for="(product, index) in inventory.products" 
+        :key="index" 
+        :product="product" 
+        :index="index"
+        @update-stock="updateStock"
+        @update-product="updateProduct"
+        @remove-product="removeProduct"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import { inventory } from '../store/inventory';
+import { inventory, updateStock, updateProduct, removeProduct } from '../store/inventory';
 import ProductItem from './ProductItem.vue';
 </script>
 

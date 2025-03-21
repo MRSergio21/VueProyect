@@ -6,7 +6,6 @@ export const inventory = reactive({
     products: savedProducts
 });
 
-// Watch para detectar cambios en stock y guardar en localStorage
 watch(
     () => inventory.products.map(p => p.stock),
     (newStock) => {
@@ -17,7 +16,6 @@ watch(
     }
 );
 
-// Watch para almacenar cambios en productos
 watch(
     () => inventory.products,
     (newProducts) => {
@@ -36,4 +34,23 @@ export const addProduct = (name, price, stock) => {
     };
     inventory.products.push(newProduct);
     localStorage.setItem('products', JSON.stringify(inventory.products));
+};
+
+export const updateProduct = (index, updatedProduct) => {
+    if (!updatedProduct.name || updatedProduct.price <= 0 || updatedProduct.stock < 0) return;
+    inventory.products[index] = { ...updatedProduct, disponible: updatedProduct.stock > 0 };
+    localStorage.setItem('products', JSON.stringify(inventory.products));
+};
+
+export const removeProduct = (index) => {
+    inventory.products.splice(index, 1);
+    localStorage.setItem('products', JSON.stringify(inventory.products));
+};
+
+export const updateStock = (index, amount) => {
+    if (inventory.products[index]) {
+        inventory.products[index].stock += amount;
+        inventory.products[index].disponible = inventory.products[index].stock > 0;
+        localStorage.setItem('products', JSON.stringify(inventory.products));
+    }
 };
